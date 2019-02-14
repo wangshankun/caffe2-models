@@ -1,8 +1,12 @@
+#! python3
 import numpy as np
-import skimage.io
-import skimage.transform
+import time
+import os, sys
+
+CAFFE_PATH = os.path.join('/home/alibaba/pytorch/build/')
+sys.path.insert(0, CAFFE_PATH)
+
 import operator
-import os
 from caffe2.python import workspace
 from caffe2.proto import caffe2_pb2
 from helpers import *
@@ -50,7 +54,11 @@ img = loadToNCHW(img, mean, input_size)
 
 ##### Run the test
 # submit the image to net and get a tensor of results
-results = p.run({'gpu_0/data_0': img})
+
+s=time.time()
+for num in range(1,100):
+    results = p.run({'gpu_0/data_0': img})
+print(time.time() - s)
 
 ##### Process the results
 # Quick way to get the top-1 prediction result

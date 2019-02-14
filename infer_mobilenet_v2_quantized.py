@@ -3,6 +3,13 @@ import skimage.io
 import skimage.transform
 import operator
 import os
+import numpy as np
+import time
+import os, sys
+
+CAFFE_PATH = os.path.join('/home/alibaba/pytorch/build')
+sys.path.insert(0, CAFFE_PATH)
+
 from caffe2.python import workspace, core, model_helper
 from caffe2.proto import caffe2_pb2
 from helpers import *
@@ -49,8 +56,10 @@ img = loadToNCHW(img, mean, input_size)
 
 ##### Run the test
 # submit the image to net and get a tensor of results
-results = p.run({'data': img})
-
+s=time.time()
+for num in range(1,100):
+    results = p.run({'data': img})
+print(time.time() - s)
 ##### Process the results
 # Quick way to get the top-1 prediction result
 # Squeeze out the unnecessary axis. This returns a 1-D array of length 1000
